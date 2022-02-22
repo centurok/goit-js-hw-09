@@ -7,16 +7,15 @@ let intervalId = null;
 const TIMER_INRERVAL = 1000;
 
 const refs = {
-    btnStart: document.querySelector('button[data-start]'),
-    inputData: document.querySelector('#datetime-picker'),
-    daysLаbel: document.querySelector('.value[data-days]'),
-    hoursLаbel: document.querySelector('.value[data-hours]'),
-    minutesLаbel: document.querySelector('.value[data-minutes]'),
-    secondsLаbel: document.querySelector('.value[data-seconds]'),
+  btnStart: document.querySelector('button[data-start]'),
+  inputData: document.querySelector('#datetime-picker'),
+  daysLаbel: document.querySelector('.value[data-days]'),
+  hoursLаbel: document.querySelector('.value[data-hours]'),
+  minutesLаbel: document.querySelector('.value[data-minutes]'),
+  secondsLаbel: document.querySelector('.value[data-seconds]'),
+};
 
-}
-
-refs.btnStart.addEventListener('click', onBtnStartClick)
+refs.btnStart.addEventListener('click', onBtnStartClick);
 
 switchDisabledBtn(!isStart);
 
@@ -25,54 +24,54 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-    onClose(selectedDates) {
-        timerTime = selectedDates[0] - options.defaultDate;
-        
-        if (timerTime <= 0) {            
-            window.alert('Выбранная дата должна быть больше текущей!');
-            return;
-        }        
-        switchDisabledBtn(isStart);      
+  onClose(selectedDates) {
+    timerTime = selectedDates[0] - options.defaultDate;
+
+    if (timerTime <= 0) {
+      window.alert('Выбранная дата должна быть больше текущей!');
+      return;
+    }
+    switchDisabledBtn(isStart);
   },
 };
 
 new flatpickr('#datetime-picker', options);
 
 function onBtnStartClick() {
-    redrawValues(); 
+  redrawValues();
 
-    switchDisabledBtn(!isStart);
-    switchDisabledInput(!isStart)
-    
-    isStart = !isStart; 
-    
-    intervalId = setInterval(resetInterval, TIMER_INRERVAL);
+  switchDisabledBtn(!isStart);
+  switchDisabledInput(!isStart);
+
+  isStart = !isStart;
+
+  intervalId = setInterval(resetInterval, TIMER_INRERVAL);
 }
 
 function resetInterval() {
-    if (timerTime <= TIMER_INRERVAL) {
-        clearInterval(intervalId); 
-        return;
-    }
-        
-    timerTime -= TIMER_INRERVAL
-    redrawValues();
+  if (timerTime <= TIMER_INRERVAL) {
+    clearInterval(intervalId);
+    return;
+  }
+
+  timerTime -= TIMER_INRERVAL;
+  redrawValues();
 }
 
 function redrawValues() {
-    const convertTime = convertMs(timerTime);
-    refs.daysLаbel.textContent = convertTime.days;
-    refs.hoursLаbel.textContent = convertTime.hours;
-    refs.minutesLаbel.textContent = convertTime.minutes;
-    refs.secondsLаbel.textContent = convertTime.seconds;
+  const convertTime = convertMs(timerTime);
+  refs.daysLаbel.textContent = convertTime.days;
+  refs.hoursLаbel.textContent = convertTime.hours;
+  refs.minutesLаbel.textContent = convertTime.minutes;
+  refs.secondsLаbel.textContent = convertTime.seconds;
 }
 
 function switchDisabledInput(value) {
-    refs.inputData.disabled = value;
+  refs.inputData.disabled = value;
 }
 
-function switchDisabledBtn (value) {    
-    refs.btnStart.disabled = value;
+function switchDisabledBtn(value) {
+  refs.btnStart.disabled = value;
 }
 
 function convertMs(ms) {
@@ -93,3 +92,7 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
+
+const addZero = value => {
+  return String(value).padStart(2, '0');
+};
